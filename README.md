@@ -16,3 +16,13 @@ gcc_dat <-
   )
 
 ```
+
+site metadata is here:
+
+```r
+site_data <- 
+  readr::read_csv(
+    "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
+    )
+
+```
