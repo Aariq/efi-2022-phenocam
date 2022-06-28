@@ -26,3 +26,8 @@ site_data <-
     )
 
 ```
+
+# Links
+
+- [challenge docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
+- [phenocam](https://phenocam.sr.unh.edu/webcam/)
