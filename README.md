@@ -27,6 +27,8 @@ site_data <-
 
 ```
 
+[Data exploration](docs/EDA.md)
+
 # Links
 
 - [challenge docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
