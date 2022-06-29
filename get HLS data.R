@@ -1,3 +1,8 @@
+site_data <- 
+  readr::read_csv(
+    "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
+  )
+
 # reference https://git.earthdata.nasa.gov/projects/LPDUR/repos/hls_tutorial_r/browse/Scripts/HLS_Tutorial.Rmd
 
 library(raster)
@@ -20,10 +25,10 @@ HLS_col <- list("HLSL30.v2.0")
 
 
 hls_df_allsite<-vector(mode="list")
-for (siteoi in site_list) {
-  sitename<-"HARV"
-  lat<- 42.536911
-  lon<- -72.17265
+for (s in 1:nrow(site_data)) {
+  sitename<-site_data$field_site_id[s]
+  lat<- site_data$field_latitude[s]
+  lon<- site_data$field_longitude[s]
   site_sp<-SpatialPoints(cbind(lon, lat), proj4string = CRS("+proj=longlat +datum=WGS84"))
   site_ext<-extent(site_sp)
   bbox <- paste(site_ext[1], site_ext[3], site_ext[2], site_ext[4], sep = ',')
@@ -74,16 +79,17 @@ for (siteoi in site_list) {
     search_df <- do.call(rbind, granule_list)
     # DT::datatable(search_df)
     
-    coordinate_reference <- "+proj=utm +zone=18 +ellps=WGS84 +units=m +no_defs"
-    site_sp_utm <- spTransform(site_sp, crs(coordinate_reference)) # Transfer CRS
-    
     dir.create(paste0(outDir, "/", sitename))
-    for (url in search_df$Asset_Link) {
+    foreach (url = search_df$Asset_Link, .packages=c("tidyverse","curl")) %dopar% {
       system(paste0("curl -b ~/.urs_cookies -L -n ",
                     url, " -o ", outDir, "/", sitename, "/", str_split(url, "/", simplify = T)[,7])  )
+      url
     }
   }
   
+  
+  coordinate_reference <- "+proj=utm +zone=18 +ellps=WGS84 +units=m +no_defs"
+  site_sp_utm <- spTransform(site_sp, crs(coordinate_reference)) # Transfer CRS
   
   hls_df_list<-vector(mode="list", length=5)
   for (band in c("Fmask", "blue", "green", "red", "nir")) {
@@ -119,15 +125,15 @@ for (siteoi in site_list) {
     hls_df_list[[band]]<-hls_mat %>% 
       as_tibble() %>% 
       left_join(time_df, by="f") %>% 
-      dplyr::select(-f) %>% 
       mutate(band=band)
   }
   
-  hls_df_allsite[[sitename]]<-bind_rows(hls_df_list) %>% 
+  hls_df_allsite[[s]]<-bind_rows(hls_df_list) %>% 
     spread(key="band", value="value") %>% 
+    dplyr::select(-f) %>%
     mutate(site=sitename)
   
-  # unlink(paste0(outDir, "/", sitename))
+  unlink(paste0(outDir, "/", sitename), recursive = T)
 } 
 
 hls_df<-bind_rows(hls_df_allsite)
