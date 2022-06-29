@@ -1,0 +1,62 @@
+---
+title: "Exploratory Data Analysis"
+author: "Eric R. Scott"
+date: '2022-06-28'
+output: github_document
+---
+
+```{r setup}
+library(tidyverse)
+library(skimr)
+library(visdat)
+theme_set(theme_bw())
+```
+
+# Read in data
+
+```{r}
+gcc_dat <- 
+  readr::read_csv(
+    "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz",
+    guess_max = 1e6
+  )
+
+site_data <- 
+  readr::read_csv(
+    "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
+    )
+
+gcc_dat <- full_join(gcc_dat, site_data |> select(siteID = field_site_id, phenocam_vegtation))
+```
+
+# Skim data
+
+```{r}
+skim(gcc_dat)
+```
+
+# Missingness
+
+```{r}
+vis_miss(gcc_dat)
+## if you want to see missingness by site:
+# gcc_dat |> group_by(siteID) |> group_split() |> map(vis_miss)
+```
+
+Weird that standard deviations aren't always missing when data is missing
+
+# Plot data
+
+```{r}
+ggplot(gcc_dat, aes(x = time, y = gcc_90, color = phenocam_vegtation)) +
+  geom_line() +
+  facet_wrap(~siteID)
+```
+
+JORN looks really dry
+
+<img src="https://phenocam.sr.unh.edu/data/archive/NEON.D14.JORN.DP1.00033/2017/07/NEON.D14.JORN.DP1.00033_2017_07_01_120006.jpg" width="500"/>
+
+SRER also looks pretty dry
+
+<img src="https://phenocam.sr.unh.edu/data/archive/NEON.D14.SRER.DP1.00033/2017/08/NEON.D14.SRER.DP1.00033_2017_08_10_120006.jpg" width="500"/>

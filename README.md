@@ -26,3 +26,14 @@ site_data <-
     )
 
 ```
+
+# Links
+
+- [challenge docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
+- [phenocam](https://phenocam.sr.unh.edu/webcam/)
+
+# Repo structure
+
+- `data/` put raw data here
+- `R/` put R functions to be `source()`ed here
+- `docs/` put .Rmd files to be rendered here
