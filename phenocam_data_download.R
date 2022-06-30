@@ -14,4 +14,4 @@ head(gcc_dat)
 gcc_use <- gcc_dat[gcc_dat$siteID %in% c("HARV", "GRSM"),]
 
 
-saveRDS(gcc_use, "processed_data/gcc_use_ross.RDS")
+saveRDS(gcc_use, "data/gcc_use_ross.RDS")
