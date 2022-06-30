@@ -50,14 +50,14 @@ noaa_future <- neon4cast::stack_noaa(dir = "drivers", model = "NOAAGEFS_1hr", fo
 # Aggregate to day and convert units of drivers
 noaa_past_mean <- noaa_past %>% 
   mutate(date = as_date(time)) %>% 
-  group_by(date) %>% 
-  summarize(air_temperature = mean(air_temperature, na.rm = TRUE), .groups = "drop") %>% 
+  group_by(date, siteID) %>% 
+  summarize(air_temperature = mean(air_temperature, na.rm = TRUE),.groups = "drop") %>% 
   rename(time = date) %>% 
   mutate(air_temperature = air_temperature - 273.15)
 
 noaa_future_mean <- noaa_future %>% 
   mutate(date = as_date(time)) %>% 
-  group_by(date, ensemble) %>% 
+  group_by(date, ensemble, siteID) %>% 
   summarize(air_temperature = mean(air_temperature, na.rm = TRUE), .groups = "drop") %>% 
   rename(time = date) %>% 
   mutate(ensemble = as.numeric(stringr::str_sub(ensemble, start = 4, end = 6)),

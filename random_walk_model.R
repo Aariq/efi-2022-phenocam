@@ -13,16 +13,16 @@ gcc_dat <- readRDS("processed_data/gcc_use_ross.RDS")
 summary(dat)
 
 # calculating anomaly
-gcc_dat <- gcc_dat |>
-  mutate(doy = yday(time)) |> 
+gcc_dat <- gcc_dat %>%
+  mutate(doy = yday(time)) %>% 
   #within each site and for each day of year...
-  group_by(doy, siteID) |> 
+  group_by(doy, siteID) %>% 
   #...calculate mean GCC for the whole time series...
-  mutate(mean_gcc_doy = mean(gcc_90, na.rm = TRUE)) |> 
-  ungroup() |> 
+  mutate(mean_gcc_doy = mean(gcc_90, na.rm = TRUE)) %>% 
+  ungroup() %>% 
   # ... then calculate GCC anomaly
   mutate(gcc_anom  = gcc_90 - mean_gcc_doy) 
-# |> 
+# %>% 
 #   #and plot!
 #   ggplot() +
 #   geom_histogram(aes(gcc_anom)) +
