@@ -152,6 +152,8 @@ for (s in 1:nrow(site_data)) {
   unlink(paste0(outDir, "/", sitename), recursive = T)
 } 
 
+stopCluster(cl)
+
 hls_df<-bind_rows(hls_df_allsite)
 write_rds(hls_df, "./data/evi ts.rds")
 
