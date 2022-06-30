@@ -21,6 +21,17 @@ library(tidyverse)
 ``` r
 library(skimr)
 library(visdat)
+library(lubridate)
+```
+
+    ## 
+    ## Attaching package: 'lubridate'
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     date, intersect, setdiff, union
+
+``` r
 theme_set(theme_bw())
 ```
 
@@ -107,8 +118,8 @@ Data summary
 |:--------------|----------:|--------------:|-----:|-----:|-----:|-----:|-----:|-----:|-----:|:------|
 | gcc_90        |      8633 |          0.80 | 0.36 | 0.04 | 0.28 | 0.33 | 0.35 | 0.39 | 0.47 | ▁▇▃▃▁ |
 | rcc_90        |      8633 |          0.80 | 0.42 | 0.04 | 0.30 | 0.39 | 0.42 | 0.45 | 0.60 | ▁▇▇▁▁ |
-| gcc_sd        |      7464 |          0.82 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.01 | ▇▆▂▁▂ |
-| rcc_sd        |      7464 |          0.82 | 0.01 | 0.01 | 0.00 | 0.01 | 0.01 | 0.02 | 0.03 | ▅▆▅▅▇ |
+| gcc_sd        |      7464 |          0.82 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.01 | ▇▇▂▁▂ |
+| rcc_sd        |      7464 |          0.82 | 0.01 | 0.01 | 0.00 | 0.01 | 0.01 | 0.02 | 0.03 | ▆▇▂▆▃ |
 
 # Missingness
 
@@ -133,6 +144,8 @@ missing
 
 # Plot data
 
+## Time Series of GCC
+
 ``` r
 ggplot(gcc_dat, aes(x = time, y = gcc_90, color = phenocam_vegtation)) +
   geom_line() +
@@ -142,6 +155,32 @@ ggplot(gcc_dat, aes(x = time, y = gcc_90, color = phenocam_vegtation)) +
     ## Warning: Removed 797 row(s) containing missing values (geom_path).
 
 ![](EDA_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+## Histograms of GCC anomalies
+
+Anomalies calculated by site and day of year
+
+``` r
+gcc_dat |>
+  mutate(doy = yday(time)) |> 
+  #within each site and for each day of year...
+  group_by(doy, siteID) |> 
+  #...calculate mean GCC for the whole time series...
+  mutate(mean_gcc_doy = mean(gcc_90, na.rm = TRUE)) |> 
+  ungroup() |> 
+  # ... then calculate GCC anomaly
+  mutate(gcc_anom  = gcc_90 - mean_gcc_doy) |> 
+  #and plot!
+  ggplot() +
+  geom_histogram(aes(gcc_anom)) +
+  facet_wrap(~siteID)
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## Warning: Removed 8633 rows containing non-finite values (stat_bin).
+
+![](EDA_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 JORN looks really dry
 
