@@ -8,15 +8,38 @@
 
 library(rjags)
 library(coda)
+
 #for x add the environmental covariates, for y add the response variable
 #y:s in validation/forecasting points should be NAs
+evi = readRDS("C:/Users/jm3669/OneDrive - Yale University/Forecasting_school_2022/Pheno_project/efi-2022-phenocam/data/evi ts.rds")
+temp_past  = readRDS("C:/Users/jm3669/OneDrive - Yale University/Forecasting_school_2022/Pheno_project/efi-2022-phenocam/data/noaa_past_climate_data.rds")
+temp_future  = readRDS("C:/Users/jm3669/OneDrive - Yale University/Forecasting_school_2022/Pheno_project/efi-2022-phenocam/data/noaa_future_climate_data.rds")
 
-train_data_all <- list(x = , y = y, n = n)
-train_data_valid <- list(x = , y = y, n = n)
+colnames(temp_past) = c('date', 'site', 'temp')
+#to start, lets take only one ensemble from the future points
+temp_future = temp_future[temp_future$ensemble==0,-2]
+colnames(temp_past) = c('date', 'site', 'temp')
+
+#add NAs for each site for the future time points
+data_pred = data.frame(rep(unique(temp_future$time), length(unique(temp_future$siteID))))
+data_pred[,2] = matrix(apply(matrix(unique(temp_future$siteID)), 1, function(x)
+                        rep(x,length(unique(temp_future$time)))), byrow = T)
+data_pred[,3] = temp_future$air_temperature
+data_pred[,4] = rep(NA, length(unique(temp_future$time))*
+                               length(unique(temp_future$siteID)))
+
+colnames(data_pred) = c('date', 'site', 'temp', 'green')
+
+data_obs = merge(evi, temp_past,  by = c('date', 'site'))
+data_obs = data_obs[, c(1,2,10,7)]
+train_data_all <- rbind(data_obs, data_pred)
+
+train_data_valid <- data_obs
+train_data_valid[train_data_valid$date>"2021-08-30",4] = NA
 
 ## Linear model
 #set the model
-linear_model = function(train_data_all, train_data_valid, test_data, forecast_data) {
+linear_model = function(train_data_all, train_data_valid) {
   
   univariate_regression <- "
   model{
