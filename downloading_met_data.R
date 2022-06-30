@@ -66,5 +66,5 @@ noaa_future_mean <- noaa_future %>%
 
 
 
-saveRDS(noaa_past_mean, "processed_data/noaa_past_climate_data.RDS")
-saveRDS(noaa_future_mean, "processed_data/noaa_future_climate_data.RDS")
+saveRDS(noaa_past_mean, "data/noaa_past_climate_data.RDS")
+saveRDS(noaa_future_mean, "data/noaa_future_climate_data.RDS")
