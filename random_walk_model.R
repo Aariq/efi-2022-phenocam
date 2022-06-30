@@ -9,7 +9,7 @@ library(daymetr)
 library(ecoforecastR)
 # loading in the phenology data
 
-gcc_dat <- readRDS("processed_data/gcc_use_ross.RDS")
+gcc_dat <- readRDS("data/gcc_use_ross.RDS")
 summary(dat)
 
 # calculating anomaly
@@ -30,7 +30,12 @@ gcc_dat <- gcc_dat %>%
 
 summary(gcc_dat)
 
-y <- gcc_dat$gcc_anom
+# limiting the data to just 2021
+gcc_dat_short <- gcc_dat[gcc_dat$time >= as.Date("2021-01-01")& gcc_dat$time < as.Date("2022-01-01"),]
+summary(gcc_dat_short)
+
+# y <- gcc_dat_short$gcc_90
+y <- gcc_dat$gcc_90
 
 # Setting Initial conditions and prior for the model
 data <- list(y=y,n=length(y),      ## data
@@ -86,3 +91,25 @@ jags.out   <- coda.samples (model = j.model,
                             n.iter = 1000)
 plot(jags.out)
 
+
+# Now that the model has converged we'll want to take a much larger sample from the MCMC and include the full vector of X's in the output
+
+jags.out   <- coda.samples (model = j.model,
+                            variable.names = c("x","tau_add","tau_obs"),
+                            n.iter = 10000)
+
+time <- gcc_dat_short$time
+time.rng = c(1,length(time))       ## adjust to zoom in and out
+out <- as.matrix(jags.out)         ## convert from coda to matrix  
+x.cols <- grep("^x",colnames(out)) ## grab all columns that start with the letter x
+ci <- apply(out[,x.cols],2,quantile,c(0.025,0.5,0.975)) ## model was fit on log scale
+
+plot(time,ci[2,],type='n',ylim=range(y,na.rm=TRUE),ylab="Greenness",xlim=time[time.rng])
+## adjust x-axis label to be monthly if zoomed
+if(diff(time.rng) < 100){ 
+  axis.Date(1, at=seq(time[time.rng[1]],time[time.rng[2]],by='month'), format = "%Y-%m")
+}
+ecoforecastR::ciEnvelope(time,ci[1,],ci[3,],col=ecoforecastR::col.alpha("red",0.75))
+points(time,y,pch="+",cex=0.5)
+
+# Doesn't look too bad, but I'm having issues getting the confidence interval to plot
