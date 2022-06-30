@@ -87,6 +87,15 @@ for (s in 1:nrow(site_data)) {
     }
   }
   
+}
+
+# possibly()
+
+for (s in 1:nrow(site_data)) {
+  sitename<-site_data$field_site_id[s]
+  lat<- site_data$field_latitude[s]
+  lon<- site_data$field_longitude[s]
+  site_sp<-SpatialPoints(cbind(lon, lat), proj4string = CRS("+proj=longlat +datum=WGS84"))
   
   coordinate_reference <- "+proj=utm +zone=18 +ellps=WGS84 +units=m +no_defs"
   site_sp_utm <- spTransform(site_sp, crs(coordinate_reference)) # Transfer CRS
@@ -114,12 +123,19 @@ for (s in 1:nrow(site_data)) {
     hls_mat<-foreach (f = 1:nday,
                       .packages = c("raster"),
                       .combine="rbind") %dopar%{
-                        file<-files[f]
-                        hls_ras<-raster(file)
                         
-                        hls_values<-cbind(value=raster::extract(hls_ras,site_sp_utm) ,f)
-                        print(paste0( band, ", ", f, " out of ", nday))
-                        hls_values[complete.cases(hls_values),]
+                        tryCatch({
+                          file<-files[f]
+                          hls_ras<-raster(file)
+                          
+                          hls_values<-cbind(value=raster::extract(hls_ras,site_sp_utm) ,f)
+                          print(paste0( band, ", ", f, " out of ", nday))
+                          hls_values[complete.cases(hls_values),]
+                        },
+                        error=function(err) {
+                          cbind(value=NA ,f)
+                        })
+                        
                       }
     
     hls_df_list[[band]]<-hls_mat %>% 
@@ -137,9 +153,9 @@ for (s in 1:nrow(site_data)) {
 } 
 
 hls_df<-bind_rows(hls_df_allsite)
-write_rds(hls_df, "./data/sample evi ts.rds")
+write_rds(hls_df, "./data/evi ts.rds")
 
-hls_df<-read_rds("./data/sample evi ts.rds")
+hls_df<-read_rds("./data/evi ts.rds")
 hls_df_proc<-hls_df %>% 
   rowwise() %>% 
   mutate(aerosol=(intToBits(Fmask) [1:8] %>% as.integer()) [7:8] %>% str_flatten() %>% as.integer(),
