@@ -10,7 +10,6 @@ library(rjags)
 library(coda)
 #for x add the environmental covariates, for y add the response variable
 #y:s in validation/forecasting points should be NAs
-load('data/sample_evi_ts.rds')
 
 train_data_all <- list(x = , y = y, n = n)
 train_data_valid <- list(x = , y = y, n = n)
