@@ -13,41 +13,50 @@ Team:
 -   [Ross Alexander](https://github.com/alexanderm10)
 -   [Jussi Mäkinen](https://github.com/jusmak)
 
-# Challenge
-- Predict greenness 35 days ahead from the current day (fixed to early February 2022)
-- Observations start 2016
+# Background
 
-# 18 study sites in total
-- 10 deciduous, 6 grassland, 2 shrubland
+Phenocams take automated daily photos of sites like this:
 
-# Problems
-- account for the between-sites variation in temporal patterns and in response to climate
-- easy access only to most recent climate data, constrained analysis to 2020->
+<img src="https://phenocam.nau.edu/data/archive/barrocolorado/2013/03/barrocolorado_2013_03_22_120103.jpg" width="500"/>
 
-# Forecasting uncertainty
-- model uncertainty
-- climate forecast uncertainty (different forecast ensembles)
+Then photos are converted to values of greenness and redness. These data
+can be used to forecast date of spring leaf-out or fall color change.
 
-# Literature
+## Challenge
 
--   <https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266>
+-   Predict greenness 35 days ahead from the current day (fixed to early
+    February 2022)
+-   Observations start 2016
 
-# Data exploration
+### 18 study sites in total
 
-[Data exploration](docs/EDA.md)
+-   10 deciduous, 6 grassland, 2 shrubland
 
-## Timeseries
+<!-- -->
 
-``` r
-tar_read(ts_plot)
-#> Warning: Removed 11245 rows containing missing values (geom_point).
-#> Warning: Removed 342 rows containing missing values (geom_point).
-#> Warning: Removed 2 row(s) containing missing values (geom_path).
-```
+    #> Warning: Removed 11245 rows containing missing values (geom_point).
+    #> Warning: Removed 342 rows containing missing values (geom_point).
+    #> Warning: Removed 2 row(s) containing missing values (geom_path).
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
+([More data exploration](docs/EDA.md))
+
+## Problems
+
+-   account for the between-sites variation in temporal patterns and in
+    response to climate
+-   easy access only to most recent climate data, constrained analysis
+    to 2020-\>
+
+## Forecasting uncertainty
+
+-   model uncertainty
+-   climate forecast uncertainty (different forecast ensembles)
+
 # Model structure
+
+-   <https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266>
 
 Data model
 
@@ -119,7 +128,7 @@ Some examples
 -   [2021-07-22](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2021-07-22/plot.pdf)
 -   [2022-05-18](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2022-05-18/plot.pdf)
 
-### Workflow:
+### `targets` workflow:
 
 ``` mermaid
 graph LR
