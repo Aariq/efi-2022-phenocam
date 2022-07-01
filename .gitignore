@@ -4,3 +4,6 @@ drivers/
 .Rhistory
 .RData
 .Ruserdata
+forecasts/*
+!forecasts/.gitkeep
+*.Pdf
