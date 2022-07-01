@@ -5,7 +5,7 @@ dat_subset<-all_dat %>%
   mutate(gcc_90=case_when(date<maxdate~gcc_90),
          gcc_sd=case_when(date<maxdate~gcc_sd),
          evi=case_when(date<maxdate~ evi),
-         evi_sd=if_else(date<maxdate~ evi_sd)) 
+         evi_sd=case_when(date<maxdate~ evi_sd)) 
 
 gcc<- dat_subset%>% 
   dplyr::select(date, gcc_90, site) %>% 
