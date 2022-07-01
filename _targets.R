@@ -42,5 +42,6 @@ tar_plan(
   batch = 60,
   date_list = seq(mindate + batch, max(gcc_dat$time), by = paste0(batch, " day")),
   RandomWalk = model_RandomWalk(),
-  out = run_model(date_list, RandomWalk, all_dat, batch, mindate)
+  out = run_model(date_list, RandomWalk, all_dat, batch, mindate),
+  tar_render(EDA, "docs/EDA.Rmd", output_format = "all")
 )
