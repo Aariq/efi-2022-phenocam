@@ -29,10 +29,15 @@ cat(
 #this should display correctly on GitHub, or code can be pasted into https://mermaid.live
 ```
 
+# Literature
+
+- https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266
+
+# Data exploration
 
 [Data exploration](docs/EDA.md)
 
-# Timeseries
+## Timeseries
 
 ```{r}
 tar_read(ts_plot)
@@ -90,6 +95,7 @@ site_data <-
     )
 
 ```
+
 
 # Repo structure
 
