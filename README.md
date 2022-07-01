@@ -60,6 +60,16 @@ Priors
 
 # Forecasts
 
+1) Prepare new data for assimilation
+2) Load posterior as prior/ initialize uninformative prior
+3) Set initial conditions
+4) Configure model
+5) Fit model (and forecast)
+6) Model assessment
+7) Summarize posteriors with hyperparameters (save hyperparameters)
+8) Combine previous data with forecast (save data)
+9) Visualize (save plots)
+
 Some examples
 
 -   [2020-11-24](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2020-11-24/plot.pdf)
