@@ -78,6 +78,7 @@ site_data <-
 
 [Data exploration](docs/EDA.md)
 
+
 # Timeseries
 
 ``` r
@@ -88,6 +89,25 @@ tar_read(ts_plot)
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+# Model structure
+
+Data model
+$$GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})$$
+$$EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})$$
+
+Process model
+$$X_{t, s} \sim N(X_{t-1, s}+ \beta_{s} T_{t, s} + \mu_{s},\tau_{a})$$
+$$X_{t, s} \sim N(X_{t-1, s}+ \beta T_{t, s},\tau_{a})$$
+$$X_{t, s} \sim N(X_{t-1, s},\tau_{a})$$
+
+Priors
+$$X_{1, s} \sim N (mu_{IC, s}, \tau_{IC, s})$$
+$$\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})$$
+$$\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})$$
+$$\tau_{a} \sim Gamma(a_a,r_a)$$
+
+
 
 # Links
 
