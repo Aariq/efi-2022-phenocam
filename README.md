@@ -19,20 +19,20 @@ basemod,bugs
 ``` mermaid
 graph LR
   subgraph legend
-    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x0a52b03877696646([""Outdated""]):::outdated
-    x0a52b03877696646([""Outdated""]):::outdated --- xbf4603d6c2c2ad6b([""Stem""]):::none
+    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x5b3426b4c7fa7dbc([""Started""]):::started
+    x5b3426b4c7fa7dbc([""Started""]):::started --- xbf4603d6c2c2ad6b([""Stem""]):::none
   end
   subgraph Graph
     x9d9338876342a883(["all_dat"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
     x68dd683e0472743b(["mindate"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
     xb8d8de52ba56a7bb(["gcc_dat_file"]):::uptodate --> x250fae475e168023(["gcc_dat"]):::uptodate
     x37a4b6e78faf3120(["noaa_dat_file"]):::uptodate --> xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate
-    x32cef2290a81c584(["ts_plot"]):::uptodate --> x793b57f9be3e25d5(["README"]):::outdated
-    x9d9338876342a883(["all_dat"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
-    x74653413816894b0(["batch"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
-    x8448797b328e6352(["date_list"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
-    x68dd683e0472743b(["mindate"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
-    x8fa3f0bfe3afe1bc(["RandomWalk"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
+    x32cef2290a81c584(["ts_plot"]):::uptodate --> x793b57f9be3e25d5(["README"]):::started
+    x9d9338876342a883(["all_dat"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
+    x74653413816894b0(["batch"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
+    x8448797b328e6352(["date_list"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
+    x68dd683e0472743b(["mindate"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
+    x8fa3f0bfe3afe1bc(["RandomWalk"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
     x18f6cc99ecb95617(["hls_df_file"]):::uptodate --> x64431175705194ee(["hls_df_proc"]):::uptodate
     x74653413816894b0(["batch"]):::uptodate --> x8448797b328e6352(["date_list"]):::uptodate
     x250fae475e168023(["gcc_dat"]):::uptodate --> x8448797b328e6352(["date_list"]):::uptodate
@@ -48,37 +48,22 @@ graph LR
     xcd447f216a0c85c5(["EDA"]):::uptodate --> xcd447f216a0c85c5(["EDA"]):::uptodate
   end
   classDef uptodate stroke:#000000,color:#ffffff,fill:#354823;
-  classDef outdated stroke:#000000,color:#000000,fill:#78B7C5;
+  classDef started stroke:#000000,color:#000000,fill:#DC863B;
   classDef none stroke:#000000,color:#000000,fill:#94a4ac;
   linkStyle 0 stroke-width:0px;
   linkStyle 1 stroke-width:0px;
   linkStyle 24 stroke-width:0px;
 ```
 
-# Target data
+# Literature
 
-gcc data is here:
+-   <https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266>
 
-``` r
-gcc_dat <- 
-  readr::read_csv(
-    "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz",
-    guess_max = 1e6
-  )
-```
-
-site metadata is here:
-
-``` r
-site_data <- 
-  readr::read_csv(
-    "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
-    )
-```
+# Data exploration
 
 [Data exploration](docs/EDA.md)
 
-# Timeseries
+## Timeseries
 
 ``` r
 tar_read(ts_plot)
@@ -119,13 +104,34 @@ Priors
 
 Some examples
 
--   [2020-11-24](forecasts/2020-11-24/plot.pdf)
+-   [2020-11-24](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2020-11-24/plot.pdf)
+-   [2021-07-22](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2021-07-22/plot.pdf)
+-   [2022-05-18](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2022-05-18/plot.pdf)
 
 # Links
 
 -   [challenge
     docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
 -   [phenocam](https://phenocam.sr.unh.edu/webcam/)
+
+gcc data is here:
+
+``` r
+gcc_dat <- 
+  readr::read_csv(
+    "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz",
+    guess_max = 1e6
+  )
+```
+
+site metadata is here:
+
+``` r
+site_data <- 
+  readr::read_csv(
+    "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
+    )
+```
 
 # Repo structure
 

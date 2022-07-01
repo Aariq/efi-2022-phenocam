@@ -29,33 +29,15 @@ cat(
 #this should display correctly on GitHub, or code can be pasted into https://mermaid.live
 ```
 
+# Literature 
 
-# Target data
+- https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266
 
-gcc data is here:
-
-```r
-gcc_dat <- 
-  readr::read_csv(
-    "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz",
-    guess_max = 1e6
-  )
-
-```
-
-site metadata is here:
-
-```r
-site_data <- 
-  readr::read_csv(
-    "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
-    )
-
-```
+# Data exploration
 
 [Data exploration](docs/EDA.md)
 
-# Timeseries
+## Timeseries
 
 ```{r}
 tar_read(ts_plot)
@@ -83,12 +65,37 @@ $$\tau_{a} \sim Gamma(a_a,r_a)$$
 
 Some examples
 
-- [2020-11-24](forecasts/2020-11-24/plot.pdf)
+- [2020-11-24](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2020-11-24/plot.pdf)
+- [2021-07-22](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2021-07-22/plot.pdf)
+- [2022-05-18](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2022-05-18/plot.pdf)
 
 # Links
 
 - [challenge docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
 - [phenocam](https://phenocam.sr.unh.edu/webcam/)
+
+
+gcc data is here:
+
+```r
+gcc_dat <- 
+  readr::read_csv(
+    "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz",
+    guess_max = 1e6
+  )
+
+```
+
+site metadata is here:
+
+```r
+site_data <- 
+  readr::read_csv(
+    "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
+    )
+
+```
+
 
 # Repo structure
 
