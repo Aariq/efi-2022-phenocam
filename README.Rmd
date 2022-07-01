@@ -24,40 +24,64 @@ Team:
 - [Ross Alexander](https://github.com/alexanderm10)
 - [Jussi Mäkinen](https://github.com/jusmak)
 
+# Background
 
-# Literature 
+Phenocams take automated daily photos of sites like this:
 
-- https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266
+<img src="https://phenocam.nau.edu/data/archive/barrocolorado/2013/03/barrocolorado_2013_03_22_120103.jpg" width="500"/>
 
-# Data exploration
+Then photos are converted to values of greenness and redness. These data can be used to forecast date of spring leaf-out or fall color change.
 
-[Data exploration](docs/EDA.md)
 
 ## Timeseries
 
-```{r}
+```{r echo=FALSE}
 tar_read(ts_plot)
 ```
 
+[More data exploration](docs/EDA.md)
 
 # Model structure
 
+- https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266
+
 Data model
+
 $$GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})$$
 $$EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})$$
 
 Process model
+
 $$X_{t, s} \sim N(X_{t-1, s}+ \beta_{s} T_{t, s} + \mu_{s},\tau_{a})$$
 $$X_{t, s} \sim N(X_{t-1, s}+ \beta T_{t, s},\tau_{a})$$
 $$X_{t, s} \sim N(X_{t-1, s},\tau_{a})$$
 
 Priors
+
 $$X_{1, s} \sim N (mu_{IC, s}, \tau_{IC, s})$$
 $$\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})$$
 $$\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})$$
 $$\tau_{a} \sim Gamma(a_a,r_a)$$
 
+### JAGS code:
+
+```{r echo=FALSE, render='asis', comment=''}
+cat(tar_read(RandomWalk))
+```
+
+
+
 # Forecasts
+
+1) Prepare new data for assimilation
+2) Load posterior as prior/ initialize uninformative prior
+3) Set initial conditions
+4) Configure model
+5) Fit model (and forecast)
+6) Model assessment
+7) Summarize posteriors with hyperparameters (save hyperparameters)
+8) Combine previous data with forecast (save data)
+9) Visualize (save plots)
 
 Some examples
 
@@ -66,7 +90,7 @@ Some examples
 - [2022-05-18](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2022-05-18/plot.pdf)
 
 
-### Workflow:
+### `targets` workflow:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 cat(
