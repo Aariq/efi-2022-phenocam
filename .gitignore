@@ -6,3 +6,4 @@ drivers/
 .Ruserdata
 forecasts/*
 !forecasts/.gitkeep
+*.Pdf
