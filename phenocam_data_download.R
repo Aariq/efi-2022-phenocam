@@ -15,3 +15,4 @@ gcc_use <- gcc_dat[gcc_dat$siteID %in% c("HARV", "GRSM"),]
 
 
 saveRDS(gcc_use, "data/gcc_use_ross.RDS")
+saveRDS(gcc_dat, "data/gcc_all_data.RDS")
