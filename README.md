@@ -119,7 +119,7 @@ Priors
 
 Some examples
 
--   [2020-11-24](forecasts/2020-11-24/plot.pdf)
+![](forecasts/2020-11-24/plot.pdf)
 
 # Links
 
