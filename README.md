@@ -13,26 +13,28 @@ Team:
 -   [Ross Alexander](https://github.com/alexanderm10)
 -   [Jussi Mäkinen](https://github.com/jusmak)
 
-# Literature
+# Background
 
--   <https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266>
+Phenocams take automated daily photos of sites like this:
 
-# Data exploration
+<img src="https://phenocam.nau.edu/data/archive/barrocolorado/2013/03/barrocolorado_2013_03_22_120103.jpg" width="500"/>
 
-[Data exploration](docs/EDA.md)
+Then photos are converted to values of greenness and redness. These data
+can be used to forecast date of spring leaf-out or fall color change.
 
 ## Timeseries
 
-``` r
-tar_read(ts_plot)
-#> Warning: Removed 11245 rows containing missing values (geom_point).
-#> Warning: Removed 342 rows containing missing values (geom_point).
-#> Warning: Removed 2 row(s) containing missing values (geom_path).
-```
+    #> Warning: Removed 11245 rows containing missing values (geom_point).
+    #> Warning: Removed 342 rows containing missing values (geom_point).
+    #> Warning: Removed 2 row(s) containing missing values (geom_path).
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
+[More data exploration](docs/EDA.md)
+
 # Model structure
+
+-   <https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266>
 
 Data model
 
@@ -104,7 +106,7 @@ Some examples
 -   [2021-07-22](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2021-07-22/plot.pdf)
 -   [2022-05-18](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2022-05-18/plot.pdf)
 
-### Workflow:
+### `targets` workflow:
 
 ``` mermaid
 graph LR
