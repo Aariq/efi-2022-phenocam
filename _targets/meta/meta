@@ -7,7 +7,7 @@ batch|stem|9dbc742e8b313d46|fd9941618d4c9ea1|ef46db3751d8e999|-1883671814||t1917
 calc_clim_anom|function|ad05d2336812a6a5|||||||||||||||
 calc_clim_anom_site|function|3202cde75c89da9b|||||||||||||||
 date_list|stem|ada78d1be123e849|45b525228bebdd3f|da1af91cf7146731|-658150534||t19174.7219376793s|4ff05336d644dae2|106|rds|local|vector|||0.002||
-EDA|stem|ea1eb4285279cd9d|d5accc72dcc136d8|4745aa592080ea1d|-844710642|docs/EDA.md*docs/EDA.Rmd*docs/EDA_files|t19174.7459766593s|d18438ef8726cd64|217652|file|local|vector|||11.244||
+EDA|stem|ea1eb4285279cd9d|d5accc72dcc136d8|4745aa592080ea1d|-844710642|docs/EDA.md*docs/EDA.Rmd*docs/EDA_files|t19174.7459766593s|b93ceca4e73595f9|8140|file|local|vector|||11.244||
 gcc_dat|stem|51656368a718b058|e8d4e91bae0f96ce|e4857045732589a7|-255273405||t19174.7055774614s|747aed9fe4217216|268161|rds|local|vector|||0.844||
 gcc_dat_file|stem|00563caa89a9b2f9|1d8d172230bc2bdd|ef46db3751d8e999|-620871384|https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz|t19174.7051642936s||0|url|local|vector|||0||
 hls_df|stem|5b89c9a4a17e6cdb|3a66fbab32d5fed4|35aa75b046b1035d|-1422610810||t19174.7055670911s|24798077f35d1ca5|64592|rds|local|vector|||0.328||
@@ -20,10 +20,10 @@ noaa_dat|stem|1e87680347188ca8|c6b0252de2a3c52d|961eb7699b29fa39|452670941||t191
 noaa_dat_file|stem|63b55b7333fde50a|d96754703e1638b2|ef46db3751d8e999|-697861609|./data/noaa_past_climate_data.RDS|t19174.6957992007s|85a2a20585cad809|68949|file|local|vector|||0.001||
 out|stem|e0d1f2ac79fc7e12|a2aaf99b8b2db3e8|8ab1fb0b615b375a|302415504||t19174.7380101504s|44e327d1ee1978d7|43|rds|local|vector|||74.906|.forecasts20201124 already exists. Removed 579 rows containing missing values geom_path.. Removed 11472 rows containing missing values geom_point.. .forecasts20210123 already exists. Removed 519 rows containing missing values geom_path.. Removed 11445 rows containing missing values geom_point.. .forecasts20210324 already exists. Removed 459 rows containing missing values geom_path.. Removed 11422 rows containing missing values geom_point.. .forecasts20210523 already exists. Removed 399 rows containing missing values geom_path.. Removed 11386 rows containing missing values geom_point.. .forecasts20210722 already exists. Removed 339 rows containing missing values geom_path.. Removed 11350 rows containing missing values geom_point.. .forecasts20210920 already exists. Removed 279 rows containing missing values geom_path.. Removed 11314 rows containing missing values geom_point.. .forecasts20211119 already exists. Removed 219 rows containing missing values geom_path.. Removed 11267 rows containing missing values geom_point.. .forecasts20220118 already exists. Removed 159 rows containing missing values geom_path.. Removed 11245 rows containing missing values geom_point.. .forecasts20220319 already exists. Removed 99 rows containing missing values geom_path.. Removed 11245 rows containing missing values geom_point.. .forecasts20220518 already exists. Removed 39 rows containing missing values geom_path.. Removed 11245 rows containing missing values geom_point.|
 plot_anom|function|d832f96de4a0b35d|||||||||||||||
-plot_ts|function|32403f9494103ef0|||||||||||||||
+plot_ts|function|2751950cfb395e0b|||||||||||||||
 RandomWalk|stem|baacd45a30bab07b|c4f5d045a3041f68|6287e28438b9cadf|1098651850||t19174.7177445984s|0e833cdd3158622c|249|rds|local|vector|||0.001||
 read_wrangle_eca|function|b18d35a411b2f2d7|||||||||||||||
 read_wrangle_eva|function|29a921672962aa40|||||||||||||||
 read_wrangle_evi|function|29a921672962aa40|||||||||||||||
 run_model|function|389c74d6ae024fe1|||||||||||||||
-ts_plot|stem|aec07b46303c80d7|b3f85dc2681d6e38|897fb7f02c305a95|-129822862||t19174.7117092368s|7dedc55143cc786f|567666|rds|local|vector|||0.039||
+ts_plot|stem|14da55289175ff28|b3f85dc2681d6e38|a01ff49655ae4e2c|-129822862||t19174.7509857837s|2509aac9aa4e1e6b|600776|rds|local|vector|||0.151||
