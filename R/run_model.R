@@ -1,9 +1,9 @@
-run_model <- function(date_list, RandomWalk, all_dat, batch, mindate) {
+run_model <- function(date_list, RandomWalk, all_dat, batch, mindate, outdir = "./forecasts/") {
   for (d in 1:length(date_list)) {
     today <- date_list[d]
     
     # create dir
-    dir.create(paste0("./forecasts/", today), recursive = T)
+    dir.create(paste0(outdir, today), recursive = T)
     
     # subset data
     dat_new <- all_dat %>%
@@ -35,7 +35,7 @@ run_model <- function(date_list, RandomWalk, all_dat, batch, mindate) {
         head(0)
     } else {
       prev_day <- date_list[d - 1]
-      dat_old<-read_rds(paste0("./data/archive/", prev_day, "/data.rds")) %>% 
+      dat_old<-read_rds(paste0(outdir, prev_day, "/data.rds")) %>% 
         filter(date<prev_day)
     }
     
@@ -51,7 +51,7 @@ run_model <- function(date_list, RandomWalk, all_dat, batch, mindate) {
     } else {
       # load previous model
       prev_day <- date_list[d - 1]
-      priors <- read_rds(paste0("./data/archive/", prev_day, "/posterior.rds"))
+      priors <- read_rds(paste0(outdir, prev_day, "/posterior.rds"))
     }
     
     
@@ -123,7 +123,7 @@ run_model <- function(date_list, RandomWalk, all_dat, batch, mindate) {
     a_add = (mu_add/sd_add)^2,
     r_add = mu_add/sd_add^2
   )
-  write_rds(posteriors, paste0("./data/archive/", today, "/posterior.rds"))
+  write_rds(posteriors, paste0(outdir, today, "/posterior.rds"))
   
   # plot
   x.cols <- grep("^x", colnames(out)) ## grab all columns that start with the letter x
@@ -133,7 +133,7 @@ run_model <- function(date_list, RandomWalk, all_dat, batch, mindate) {
                           dat_new %>%
                             cbind(t(ci))
   )
-  write_rds(dat_fitted, paste0("./data/archive/", today, "/data.rds"))
+  write_rds(dat_fitted, paste0(outdir, today, "/data.rds"))
   
   p <- ggplot(dat_fitted) +
     geom_line(aes(x = date, y = gcc_90), col = "dark green") +
@@ -143,7 +143,7 @@ run_model <- function(date_list, RandomWalk, all_dat, batch, mindate) {
     facet_wrap(. ~ site) +
     theme_classic()
   
-  cairo_pdf(paste0("./data/archive/", today, "/plot.pdf"))
+  cairo_pdf(paste0(outdir, today, "/plot.pdf"))
   print(p)
   dev.off()
   
