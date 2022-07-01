@@ -1,9 +1,11 @@
+# load gcc data
 gcc_dat <-
   readr::read_csv(
     "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz",
     guess_max = 1e6
   )
 
+# load remote sensing data (EVI)
 hls_df <- read_rds("./data/evi ts.rds")
 hls_df_proc <- hls_df %>%
   rowwise() %>%
@@ -38,9 +40,13 @@ hls_df_proc <- hls_df %>%
   filter(evi > 0, evi <= 1) %>%
   filter(red > 0, green > 0, blue > 0)
 
+# load temp data
 noaa_dat <- read_rds("./data/noaa_past_climate_data.RDS")
+
+# starting point
 mindate <- min(noaa_dat$time)
 
+# joining datasets
 all_dat <- gcc_dat %>%
   dplyr::select(-rcc_90, -rcc_sd) %>%
   rename(site = siteID, date = time) %>%
@@ -66,6 +72,7 @@ ggplot(all_dat %>% filter(date >= mindate)) +
   facet_wrap(. ~ site) +
   theme_classic()
 
+# calulate climatology and anomaly
 all_dat_clim_site <- all_dat %>%
   filter(date < mindate) %>%
   group_by(site, doy) %>%
@@ -81,7 +88,6 @@ all_dat_clim_site <- all_dat %>%
 #   summarise(temp_clim=mean(temp, na.rm=T)
 #   ) %>%
 #   ungroup()
-
 
 all_dat_ano <- all_dat %>%
   left_join(all_dat_clim_site, by = c("site", "doy")) %>%
@@ -105,20 +111,26 @@ ggplot(all_dat_ano %>% filter(date >= mindate)) +
   facet_wrap(. ~ site) +
   theme_classic()
 
-date_list <- seq(mindate + 30, as.Date("2022-06-23") - 30, by = "30 day")
+# set stopping points
+batch<-60
+date_list <- seq(mindate + batch, as.Date("2022-06-23"), by = paste0(batch, " day"))
 for (d in 1:length(date_list)) {
   today <- date_list[d]
+
+  # create dir
   dir.create(paste0("./data/archive/", today), recursive = T)
+
   # subset data
   dat_new <- all_dat %>%
-    filter(date >= today - 30) %>%
-    mutate(
+    filter(date >= today - batch) %>%
+    mutate( # set data after today to NA
       gcc_90 = case_when(date < today ~ gcc_90),
       gcc_sd = case_when(date < today ~ gcc_sd),
       evi = case_when(date < today ~ evi),
       evi_sd = case_when(date < today ~ evi_sd)
     )
-  
+
+  # make matrices for observations
   gcc <- dat_new %>%
     dplyr::select(date, gcc_90, site) %>%
     spread(key = "site", value = "gcc_90") %>%
@@ -129,10 +141,20 @@ for (d in 1:length(date_list)) {
     spread(key = "site", value = "evi") %>%
     dplyr::select(-date) %>%
     as.matrix()
-  # site<- all_dat %>% filter(date>=mindate) %>% pull(site) %>% as.factor() %>% as.integer()
+
+  # load previous data
+  if (d ==1) {
+    
+    dat_old <- all_dat %>%
+      filter(date>=mindate) %>% 
+      head(0)
+  } else {
+    prev_day <- date_list[d - 1]
+    dat_old<-read_rds(paste0("./data/archive/", prev_day, "/data.rds")) %>% 
+      filter(date<prev_day)
+  }
   
-  
-  # load prior model
+  # load priors
   if (d == 1) {
     # initialize
     priors <- list(
@@ -144,11 +166,11 @@ for (d in 1:length(date_list)) {
   } else {
     # load previous model
     prev_day <- date_list[d - 1]
-    priors <- read_rds(paste0("./data/archive/", prev_day, "_posterior.rds"))
+    priors <- read_rds(paste0("./data/archive/", prev_day, "/posterior.rds"))
   }
-  
-  
-  # Setting Initial conditions and prior for the model
+
+
+  # Setting data and prior for the model
   data <- c(
     list(
       gcc = gcc,
@@ -158,7 +180,8 @@ for (d in 1:length(date_list)) {
     ),
     priors
   )
-  
+
+  # model structure
   RandomWalk <- "
 model{
   
@@ -186,72 +209,85 @@ model{
 }
 "
 
-####
-# Defining the initial state of each of the chains we are going to run
+  ####
+  # Defining the initial state of each of the chains we are going to run
 
-nchain <- 3
-init <- list()
-for (i in 1:nchain) {
-  # y.samp = sample(y,length(y),replace=TRUE)
-  # init[[i]] <- list(tau_add=1/var(diff(y.samp)),  ## initial guess on process precision
-  #                   tau_obs=5/var(y.samp))        ## initial guess on obs precision
-  init[[i]] <- list(
-    tau_add = 500, ## initial guess on process precision
-    tau_obs_gcc = 500,
-    tau_obs_evi = 500
-  ) ## initial guess on obs precision
-}
+  nchain <- 3
+  init <- list()
+  for (i in 1:nchain) {
+    # y.samp = sample(y,length(y),replace=TRUE)
+    # init[[i]] <- list(tau_add=1/var(diff(y.samp)),  ## initial guess on process precision
+    #                   tau_obs=5/var(y.samp))        ## initial guess on obs precision
+    init[[i]] <- list(
+      tau_add = 500, ## initial guess on process precision
+      tau_obs_gcc = 500,
+      tau_obs_evi = 500
+    ) ## initial guess on obs precision
+  }
 
-####
-# Presenting basic model to JAGS
-j.model <- jags.model(
-  file = textConnection(RandomWalk),
-  data = data,
-  inits = init,
-  n.chains = 3
-)
-jags.out <- coda.samples(
-  model = j.model,
-  variable.names = c("x", "tau_add", "tau_obs_gcc", "tau_obs_evi"),
-  n.iter = 1000
-)
-out <- as.matrix(jags.out) ## convert from coda to matrix
+  ####
+  # Presenting basic model to JAGS
+  j.model <- jags.model(
+    file = textConnection(RandomWalk),
+    data = data,
+    inits = init,
+    n.chains = 3
+  )
 
-# save posteriors
-x_ic <- tau_ic <- rep(NA, ncol(gcc))
-for (s in 1:ncol(gcc)) {
-  x.col <- paste0("x[", 30 * d + 1, ",", s, "]")
-  x_ic[s] <- mean(out[, x.col])
-  tau_ic[s] <- 1 / sd(out[, x.col])^2
-}
-posteriors <- list(
-  x_ic = x_ic, tau_ic = tau_ic, ## initial condition prior
-  a_obs_gcc = mean(out[, "tau_obs_gcc"]),
-  r_obs_gcc = 1 / sd(out[, "tau_obs_gcc"])^2, ## obs error prior
-  a_obs_evi = mean(out[, "tau_obs_evi"]),
-  r_obs_evi = 1 / sd(out[, "tau_obs_evi"])^2, ## obs error prior
-  a_add = mean(out[, "tau_add"]),
-  r_add = 1 / sd(out[, "tau_add"])^2
-)
-write_rds(posteriors, paste0("./data/archive/", today, "_posterior.rds"))
+  # run MCMC
+  jags.out <- coda.samples(
+    model = j.model,
+    variable.names = c("x", "tau_add", "tau_obs_gcc", "tau_obs_evi"),
+    n.iter = 1000
+  )
+  out <- as.matrix(jags.out) ## convert from coda to matrix
 
-# plot
-x.cols <- grep("^x", colnames(out)) ## grab all columns that start with the letter x
-ci <- apply(out[, x.cols], 2, quantile, c(0.025, 0.5, 0.975)) ## model was fit on log scale
+  # Save posteriors
+  x_ic <- tau_ic <- rep(NA, ncol(gcc))
+  for (s in 1:ncol(gcc)) {
+    x.col <- paste0("x[", batch+1, ",", s, "]")
+    x_ic[s] <- mean(out[, x.col])
+    tau_ic[s] <- 1 / sd(out[, x.col])^2
+  }
+  mu_obs_gcc<-mean(out[, "tau_obs_gcc"])
+  sd_obs_gcc<-sd(out[, "tau_obs_gcc"])
+  mu_obs_evi<-mean(out[, "tau_obs_evi"])
+  sd_obs_evi<-sd(out[, "tau_obs_evi"])
+  mu_add<-mean(out[, "tau_add"])
+  sd_add<-sd(out[, "tau_add"])
+  
+  posteriors <- list(
+    x_ic = x_ic, tau_ic = tau_ic, ## initial condition prior
+    a_obs_gcc = (mu_obs_gcc/sd_obs_gcc)^2,
+    r_obs_gcc =mu_obs_gcc/sd_obs_gcc^2, ## obs error prior
+    a_obs_evi = (mu_obs_evi/sd_obs_evi)^2,
+    r_obs_evi = mu_obs_evi/sd_obs_evi^2, ## obs error prior
+    a_add = (mu_add/sd_add)^2,
+    r_add = mu_add/sd_add^2
+  )
+  write_rds(posteriors, paste0("./data/archive/", today, "/posterior.rds"))
 
-dat_fitted <- dat_new %>%
-  cbind(t(ci))
-write_rds(dat_fitted, paste0("./data/archive/", today, "_data.rds"))
+  # plot
+  x.cols <- grep("^x", colnames(out)) ## grab all columns that start with the letter x
+  ci <- apply(out[, x.cols], 2, quantile, c(0.025, 0.5, 0.975)) ## model was fit on log scale
 
-p <- ggplot(dat_fitted) +
-  geom_line(aes(x = date, y = gcc_90), col = "dark green") +
-  geom_point(aes(x = date, y = evi), col = "light green") +
-  geom_ribbon(aes(x = date, ymin = `2.5%`, ymax = `97.5%`), fill = "blue", alpha = 0.5) +
-  geom_line(aes(x = date, y = `50%`), col = "blue") +
-  facet_wrap(. ~ site) +
-  theme_classic()
+  dat_fitted <- bind_rows(dat_old,
+                          dat_new %>%
+                            cbind(t(ci))
+  )
+  write_rds(dat_fitted, paste0("./data/archive/", today, "/data.rds"))
 
-cairo_pdf(paste0("./data/archive/", today, "_plot.rds"))
-print(p)
-dev.off()
+  p <- ggplot(dat_fitted) +
+    geom_line(aes(x = date, y = gcc_90), col = "dark green") +
+    geom_point(aes(x = date, y = evi), col = "light green") +
+    geom_ribbon(aes(x = date, ymin = `2.5%`, ymax = `97.5%`), fill = "blue", alpha = 0.5) +
+    geom_line(aes(x = date, y = `50%`), col = "blue") +
+    facet_wrap(. ~ site) +
+    theme_classic()
+
+  cairo_pdf(paste0("./data/archive/", today, "/plot.pdf"))
+  print(p)
+  dev.off()
+  
+  print (paste0(today, " completed."))
 }
