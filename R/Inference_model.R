@@ -11,9 +11,9 @@ library(coda)
 
 #for x add the environmental covariates, for y add the response variable
 #y:s in validation/forecasting points should be NAs
-evi = readRDS("C:/Users/jm3669/OneDrive - Yale University/Forecasting_school_2022/Pheno_project/efi-2022-phenocam/data/evi ts.rds")
-temp_past  = readRDS("C:/Users/jm3669/OneDrive - Yale University/Forecasting_school_2022/Pheno_project/efi-2022-phenocam/data/noaa_past_climate_data.rds")
-temp_future  = readRDS("C:/Users/jm3669/OneDrive - Yale University/Forecasting_school_2022/Pheno_project/efi-2022-phenocam/data/noaa_future_climate_data.rds")
+evi = readRDS("./data/evi ts.rds")
+temp_past  = readRDS("./data/noaa_past_climate_data.rds")
+temp_future  = readRDS("./data/noaa_future_climate_data.rds")
 
 colnames(temp_past) = c('date', 'site', 'temp')
 #to start, lets take only one ensemble from the future points
@@ -215,3 +215,4 @@ y_pred_high = apply(exp(y_pred_samp), 1, function(x) quantile(x,.975))
 model_output = list('RMSE' = RMSE, 'Type1' = Type1, 'Forecast_mean' = y_pred,
                     'Forecast_low' = y_pred_low, 'Forecast_high' = y_pred_high)
 }
+
