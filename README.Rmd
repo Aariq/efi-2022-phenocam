@@ -57,6 +57,14 @@ $$\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})$$
 $$\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})$$
 $$\tau_{a} \sim Gamma(a_a,r_a)$$
 
+### JAGS code:
+
+```{r echo=FALSE, render='asis', comment=''}
+cat(tar_read(RandomWalk))
+```
+
+
+
 # Forecasts
 
 Some examples

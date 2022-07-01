@@ -58,6 +58,34 @@ Priors
 
 ![\tau\_{a} \sim Gamma(a_a,r_a)](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Ba%7D%20%5Csim%20Gamma%28a_a%2Cr_a%29 "\tau_{a} \sim Gamma(a_a,r_a)")
 
+### JAGS code:
+
+
+    model{
+      
+      for (s in 1:ns) {
+        #### Data Model
+        for(t in 1:nt){
+          gcc[t, s] ~ dnorm(x[t, s],tau_obs_gcc)
+          evi[t, s] ~ dnorm(x[t, s],tau_obs_evi)
+        }
+        
+        #### Process Model
+        for(t in 2:nt){
+          x[t, s]~dnorm(x[t-1, s],tau_add)
+        }
+      }
+      
+      
+      #### Priors
+      for (s in 1:ns) {
+         x[1, s] ~ dnorm(x_ic[s],tau_ic[s])
+      }
+      tau_obs_gcc ~ dgamma(a_obs_gcc,r_obs_gcc)
+      tau_obs_evi ~ dgamma(a_obs_evi,r_obs_evi)
+      tau_add ~ dgamma(a_add,r_add)
+    }
+
 # Forecasts
 
 Some examples
@@ -79,6 +107,7 @@ graph LR
     x68dd683e0472743b(["mindate"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
     xb8d8de52ba56a7bb(["gcc_dat_file"]):::uptodate --> x250fae475e168023(["gcc_dat"]):::uptodate
     x37a4b6e78faf3120(["noaa_dat_file"]):::uptodate --> xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate
+    x8fa3f0bfe3afe1bc(["RandomWalk"]):::uptodate --> x793b57f9be3e25d5(["README"]):::started
     x32cef2290a81c584(["ts_plot"]):::uptodate --> x793b57f9be3e25d5(["README"]):::started
     x9d9338876342a883(["all_dat"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
     x74653413816894b0(["batch"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
@@ -104,7 +133,7 @@ graph LR
   classDef none stroke:#000000,color:#000000,fill:#94a4ac;
   linkStyle 0 stroke-width:0px;
   linkStyle 1 stroke-width:0px;
-  linkStyle 24 stroke-width:0px;
+  linkStyle 25 stroke-width:0px;
 ```
 
 # Resources for Challenge
