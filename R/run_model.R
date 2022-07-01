@@ -3,7 +3,7 @@ run_model <- function(date_list, RandomWalk, all_dat, batch, mindate) {
     today <- date_list[d]
     
     # create dir
-    dir.create(paste0("./data/archive/", today), recursive = T)
+    dir.create(paste0("./forecasts/", today), recursive = T)
     
     # subset data
     dat_new <- all_dat %>%
