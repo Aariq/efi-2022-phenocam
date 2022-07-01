@@ -25,5 +25,6 @@ RandomWalk|stem|baacd45a30bab07b|c4f5d045a3041f68|6287e28438b9cadf|1098651850||t
 read_wrangle_eca|function|b18d35a411b2f2d7|||||||||||||||
 read_wrangle_eva|function|29a921672962aa40|||||||||||||||
 read_wrangle_evi|function|29a921672962aa40|||||||||||||||
+README|stem|c2ca18a985f4dd8d|4610c18737e83c72|48eb1856d0d581b0|-1347750081|README.md*README.Rmd*README_files|t19174.7536122492s|007dece729272aed|138077|file|local|vector|||9.681||
 run_model|function|389c74d6ae024fe1|||||||||||||||
 ts_plot|stem|14da55289175ff28|b3f85dc2681d6e38|a01ff49655ae4e2c|-129822862||t19174.7509857837s|2509aac9aa4e1e6b|600776|rds|local|vector|||0.151||

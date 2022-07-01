@@ -54,6 +54,13 @@ site_data <-
 
 [Data exploration](docs/EDA.md)
 
+# Timeseries
+
+```{r}
+tar_read(ts_plot)
+```
+
+
 # Links
 
 - [challenge docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)

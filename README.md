@@ -19,13 +19,15 @@ basemod,bugs
 ``` mermaid
 graph LR
   subgraph legend
-    x7420bd9270f8d27d([""Up to date""]):::uptodate --- xbf4603d6c2c2ad6b([""Stem""]):::none
+    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x5b3426b4c7fa7dbc([""Started""]):::started
+    x5b3426b4c7fa7dbc([""Started""]):::started --- xbf4603d6c2c2ad6b([""Stem""]):::none
   end
   subgraph Graph
     x9d9338876342a883(["all_dat"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
     x68dd683e0472743b(["mindate"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
     xb8d8de52ba56a7bb(["gcc_dat_file"]):::uptodate --> x250fae475e168023(["gcc_dat"]):::uptodate
     x37a4b6e78faf3120(["noaa_dat_file"]):::uptodate --> xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate
+    x32cef2290a81c584(["ts_plot"]):::uptodate --> x793b57f9be3e25d5(["README"]):::started
     x9d9338876342a883(["all_dat"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
     x74653413816894b0(["batch"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
     x8448797b328e6352(["date_list"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
@@ -43,10 +45,14 @@ graph LR
     x250fae475e168023(["gcc_dat"]):::uptodate --> x9d9338876342a883(["all_dat"]):::uptodate
     x64431175705194ee(["hls_df_proc"]):::uptodate --> x9d9338876342a883(["all_dat"]):::uptodate
     xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate --> x9d9338876342a883(["all_dat"]):::uptodate
+    xcd447f216a0c85c5(["EDA"]):::uptodate --> xcd447f216a0c85c5(["EDA"]):::uptodate
   end
   classDef uptodate stroke:#000000,color:#ffffff,fill:#354823;
+  classDef started stroke:#000000,color:#000000,fill:#DC863B;
   classDef none stroke:#000000,color:#000000,fill:#94a4ac;
   linkStyle 0 stroke-width:0px;
+  linkStyle 1 stroke-width:0px;
+  linkStyle 24 stroke-width:0px;
 ```
 
 # Target data
@@ -71,6 +77,17 @@ site_data <-
 ```
 
 [Data exploration](docs/EDA.md)
+
+# Timeseries
+
+``` r
+tar_read(ts_plot)
+#> Warning: Removed 11245 rows containing missing values (geom_point).
+#> Warning: Removed 342 rows containing missing values (geom_point).
+#> Warning: Removed 2 row(s) containing missing values (geom_path).
+```
+
+![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 # Links
 
