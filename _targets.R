@@ -28,7 +28,7 @@ tar_plan(
   tar_target(gcc_dat_file, "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz", format = "url"),
   gcc_dat = read_csv(gcc_dat_file, guess_max = 1e6),
   tar_file(hls_df_file, "data/eva_ts.csv"),
-  hls_df_proc = read_wrangle_eva(hls_df_file),
+  hls_df_proc = read_wrangle_evi(hls_df_file),
   tar_file(noaa_dat_file, "./data/noaa_past_climate_data.RDS"),
   noaa_dat = read_rds(noaa_dat_file),
   

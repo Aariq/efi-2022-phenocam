@@ -1,4 +1,4 @@
-read_wrangle_eva <- function(filepath) {
+read_wrangle_evi <- function(filepath) {
   read_csv(filepath) %>% 
     mutate(across(c(year, doy), as.integer)) %>%
     rowwise() %>%
