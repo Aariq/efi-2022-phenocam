@@ -19,15 +19,15 @@ basemod,bugs
 ``` mermaid
 graph LR
   subgraph legend
-    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x5b3426b4c7fa7dbc([""Started""]):::started
-    x5b3426b4c7fa7dbc([""Started""]):::started --- xbf4603d6c2c2ad6b([""Stem""]):::none
+    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x0a52b03877696646([""Outdated""]):::outdated
+    x0a52b03877696646([""Outdated""]):::outdated --- xbf4603d6c2c2ad6b([""Stem""]):::none
   end
   subgraph Graph
     x9d9338876342a883(["all_dat"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
     x68dd683e0472743b(["mindate"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
     xb8d8de52ba56a7bb(["gcc_dat_file"]):::uptodate --> x250fae475e168023(["gcc_dat"]):::uptodate
     x37a4b6e78faf3120(["noaa_dat_file"]):::uptodate --> xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate
-    x32cef2290a81c584(["ts_plot"]):::uptodate --> x793b57f9be3e25d5(["README"]):::started
+    x32cef2290a81c584(["ts_plot"]):::uptodate --> x793b57f9be3e25d5(["README"]):::outdated
     x9d9338876342a883(["all_dat"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
     x74653413816894b0(["batch"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
     x8448797b328e6352(["date_list"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
@@ -48,7 +48,7 @@ graph LR
     xcd447f216a0c85c5(["EDA"]):::uptodate --> xcd447f216a0c85c5(["EDA"]):::uptodate
   end
   classDef uptodate stroke:#000000,color:#ffffff,fill:#354823;
-  classDef started stroke:#000000,color:#000000,fill:#DC863B;
+  classDef outdated stroke:#000000,color:#000000,fill:#78B7C5;
   classDef none stroke:#000000,color:#000000,fill:#94a4ac;
   linkStyle 0 stroke-width:0px;
   linkStyle 1 stroke-width:0px;
@@ -78,7 +78,6 @@ site_data <-
 
 [Data exploration](docs/EDA.md)
 
-
 # Timeseries
 
 ``` r
@@ -93,21 +92,34 @@ tar_read(ts_plot)
 # Model structure
 
 Data model
-$$GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})$$
-$$EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})$$
+
+![GCC\_{t, s} \sim N (X\_{t, s}, \tau\_{o, GCC})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;GCC_%7Bt%2C%20s%7D%20%5Csim%20N%20%28X_%7Bt%2C%20s%7D%2C%20%5Ctau_%7Bo%2C%20GCC%7D%29 "GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})")
+
+![EVI\_{t, s} \sim N (X\_{t, s}, \tau\_{o, EVI})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;EVI_%7Bt%2C%20s%7D%20%5Csim%20N%20%28X_%7Bt%2C%20s%7D%2C%20%5Ctau_%7Bo%2C%20EVI%7D%29 "EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})")
 
 Process model
-$$X_{t, s} \sim N(X_{t-1, s}+ \beta_{s} T_{t, s} + \mu_{s},\tau_{a})$$
-$$X_{t, s} \sim N(X_{t-1, s}+ \beta T_{t, s},\tau_{a})$$
-$$X_{t, s} \sim N(X_{t-1, s},\tau_{a})$$
+
+![X\_{t, s} \sim N(X\_{t-1, s}+ \beta\_{s} T\_{t, s} + \mu\_{s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2B%20%5Cbeta_%7Bs%7D%20T_%7Bt%2C%20s%7D%20%2B%20%5Cmu_%7Bs%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s}+ \beta_{s} T_{t, s} + \mu_{s},\tau_{a})")
+
+![X\_{t, s} \sim N(X\_{t-1, s}+ \beta T\_{t, s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2B%20%5Cbeta%20T_%7Bt%2C%20s%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s}+ \beta T_{t, s},\tau_{a})")
+
+![X\_{t, s} \sim N(X\_{t-1, s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s},\tau_{a})")
 
 Priors
-$$X_{1, s} \sim N (mu_{IC, s}, \tau_{IC, s})$$
-$$\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})$$
-$$\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})$$
-$$\tau_{a} \sim Gamma(a_a,r_a)$$
 
+![X\_{1, s} \sim N (mu\_{IC, s}, \tau\_{IC, s})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7B1%2C%20s%7D%20%5Csim%20N%20%28mu_%7BIC%2C%20s%7D%2C%20%5Ctau_%7BIC%2C%20s%7D%29 "X_{1, s} \sim N (mu_{IC, s}, \tau_{IC, s})")
 
+![\tau\_{o, GCC} \sim Gamma(a\_{o, GCC},r\_{o, GCC})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Bo%2C%20GCC%7D%20%5Csim%20Gamma%28a_%7Bo%2C%20GCC%7D%2Cr_%7Bo%2C%20GCC%7D%29 "\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})")
+
+![\tau\_{o, EVI} \sim Gamma(a\_{o, EVI},r\_{o, EVI})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Bo%2C%20EVI%7D%20%5Csim%20Gamma%28a_%7Bo%2C%20EVI%7D%2Cr_%7Bo%2C%20EVI%7D%29 "\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})")
+
+![\tau\_{a} \sim Gamma(a_a,r_a)](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Ba%7D%20%5Csim%20Gamma%28a_a%2Cr_a%29 "\tau_{a} \sim Gamma(a_a,r_a)")
+
+# Forecasts
+
+Some examples
+
+-   [2020-11-24](forecasts/2020-11-24/plot.pdf)
 
 # Links
 
