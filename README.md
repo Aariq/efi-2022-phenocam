@@ -22,9 +22,7 @@ Team:
 
 # Problems
 - account for the between-sites variation in temporal patterns and in response to climate
-
-# Unexpected problems
-- easi access only to most recent climate data, constrained analysis to 2020->
+- easy access only to most recent climate data, constrained analysis to 2020->
 
 # Forecasting uncertainty
 - model uncertainty
