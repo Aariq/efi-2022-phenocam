@@ -1,2 +1,4 @@
-library(tidyverse)
-library(rjags)
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(rjags)
+})

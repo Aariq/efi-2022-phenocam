@@ -4,8 +4,10 @@
 #   https://books.ropensci.org/targets/walkthrough.html#inspect-the-pipeline # nolint
 
 # Load packages required to define the pipeline:
-library(targets)
-library(tarchetypes)
+suppressPackageStartupMessages({
+  library(targets)
+  library(tarchetypes)
+})
 
 #load packages used in the pipeline
 source("packages.R")
