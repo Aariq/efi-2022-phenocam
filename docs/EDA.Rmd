@@ -9,6 +9,7 @@ output: github_document
 library(tidyverse)
 library(skimr)
 library(visdat)
+library(lubridate)
 theme_set(theme_bw())
 ```
 
@@ -47,11 +48,34 @@ Weird that standard deviations aren't always missing when data is missing
 
 # Plot data
 
+## Time Series of GCC
+
 ```{r}
 ggplot(gcc_dat, aes(x = time, y = gcc_90, color = phenocam_vegtation)) +
   geom_line() +
   facet_wrap(~siteID)
 ```
+
+## Histograms of GCC anomalies
+
+Anomalies calculated by site and day of year
+
+```{r}
+gcc_dat |>
+  mutate(doy = yday(time)) |> 
+  #within each site and for each day of year...
+  group_by(doy, siteID) |> 
+  #...calculate mean GCC for the whole time series...
+  mutate(mean_gcc_doy = mean(gcc_90, na.rm = TRUE)) |> 
+  ungroup() |> 
+  # ... then calculate GCC anomaly
+  mutate(gcc_anom  = gcc_90 - mean_gcc_doy) |> 
+  #and plot!
+  ggplot() +
+  geom_histogram(aes(gcc_anom)) +
+  facet_wrap(~siteID)
+```
+
 
 JORN looks really dry
 
