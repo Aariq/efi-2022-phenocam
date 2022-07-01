@@ -142,10 +142,7 @@ run_model <- function(date_list, RandomWalk, all_dat, batch, mindate, outdir = "
     geom_line(aes(x = date, y = `50%`), col = "blue") +
     facet_wrap(. ~ site) +
     theme_classic()
-  
-  cairo_pdf(paste0(outdir, today, "/plot.pdf"))
-  print(p)
-  dev.off()
+  ggsave(paste0(outdir, today, "/plot.pdf"), p)
   
   print (paste0(today, " completed."))
   }
