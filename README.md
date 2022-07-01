@@ -46,6 +46,25 @@ $$\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})$$
 $$\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})$$
 $$\tau_{a} \sim Gamma(a_a,r_a)$$
 
+# Workflow 
+
+Prepare new data for assimilation
+
+Load posterior as prior/ initialize prior
+
+Set initial conditions
+
+Configure model
+
+Fit model (and forecast)
+
+Model assessment
+
+Save posterior
+
+Combine previous data with forecast, save data
+
+Visualize
 
 # Links
 
