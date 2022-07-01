@@ -1,10 +1,70 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# efi-2022-phenocam
+# Phenocam Forecast for NEFI summer course 2022
 
 <!-- badges: start -->
 <!-- badges: end -->
+
+Team:
+
+-   [Eric Scott](https://github.com/Aariq)
+-   [Yiluan Song](https://github.com/yiluansong)
+-   [Ross Alexander](https://github.com/alexanderm10)
+-   [Jussi Mäkinen](https://github.com/jusmak)
+
+# Literature
+
+-   <https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266>
+
+# Data exploration
+
+[Data exploration](docs/EDA.md)
+
+## Timeseries
+
+``` r
+tar_read(ts_plot)
+#> Warning: Removed 11245 rows containing missing values (geom_point).
+#> Warning: Removed 342 rows containing missing values (geom_point).
+#> Warning: Removed 2 row(s) containing missing values (geom_path).
+```
+
+![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+# Model structure
+
+Data model
+
+![GCC\_{t, s} \sim N (X\_{t, s}, \tau\_{o, GCC})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;GCC_%7Bt%2C%20s%7D%20%5Csim%20N%20%28X_%7Bt%2C%20s%7D%2C%20%5Ctau_%7Bo%2C%20GCC%7D%29 "GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})")
+
+![EVI\_{t, s} \sim N (X\_{t, s}, \tau\_{o, EVI})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;EVI_%7Bt%2C%20s%7D%20%5Csim%20N%20%28X_%7Bt%2C%20s%7D%2C%20%5Ctau_%7Bo%2C%20EVI%7D%29 "EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})")
+
+Process model
+
+![X\_{t, s} \sim N(X\_{t-1, s}+ \beta\_{s} T\_{t, s} + \mu\_{s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2B%20%5Cbeta_%7Bs%7D%20T_%7Bt%2C%20s%7D%20%2B%20%5Cmu_%7Bs%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s}+ \beta_{s} T_{t, s} + \mu_{s},\tau_{a})")
+
+![X\_{t, s} \sim N(X\_{t-1, s}+ \beta T\_{t, s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2B%20%5Cbeta%20T_%7Bt%2C%20s%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s}+ \beta T_{t, s},\tau_{a})")
+
+![X\_{t, s} \sim N(X\_{t-1, s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s},\tau_{a})")
+
+Priors
+
+![X\_{1, s} \sim N (mu\_{IC, s}, \tau\_{IC, s})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7B1%2C%20s%7D%20%5Csim%20N%20%28mu_%7BIC%2C%20s%7D%2C%20%5Ctau_%7BIC%2C%20s%7D%29 "X_{1, s} \sim N (mu_{IC, s}, \tau_{IC, s})")
+
+![\tau\_{o, GCC} \sim Gamma(a\_{o, GCC},r\_{o, GCC})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Bo%2C%20GCC%7D%20%5Csim%20Gamma%28a_%7Bo%2C%20GCC%7D%2Cr_%7Bo%2C%20GCC%7D%29 "\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})")
+
+![\tau\_{o, EVI} \sim Gamma(a\_{o, EVI},r\_{o, EVI})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Bo%2C%20EVI%7D%20%5Csim%20Gamma%28a_%7Bo%2C%20EVI%7D%2Cr_%7Bo%2C%20EVI%7D%29 "\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})")
+
+![\tau\_{a} \sim Gamma(a_a,r_a)](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Ba%7D%20%5Csim%20Gamma%28a_a%2Cr_a%29 "\tau_{a} \sim Gamma(a_a,r_a)")
+
+# Forecasts
+
+Some examples
+
+-   [2020-11-24](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2020-11-24/plot.pdf)
+-   [2021-07-22](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2021-07-22/plot.pdf)
+-   [2022-05-18](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2022-05-18/plot.pdf)
 
 ### Workflow:
 
@@ -55,60 +115,7 @@ graph LR
   linkStyle 24 stroke-width:0px;
 ```
 
-# Literature
-
--   <https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266>
-
-# Data exploration
-
-[Data exploration](docs/EDA.md)
-
-## Timeseries
-
-``` r
-tar_read(ts_plot)
-#> Warning: Removed 11245 rows containing missing values (geom_point).
-#> Warning: Removed 342 rows containing missing values (geom_point).
-#> Warning: Removed 2 row(s) containing missing values (geom_path).
-```
-
-![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
-
-# Model structure
-
-Data model
-
-![GCC\_{t, s} \sim N (X\_{t, s}, \tau\_{o, GCC})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;GCC_%7Bt%2C%20s%7D%20%5Csim%20N%20%28X_%7Bt%2C%20s%7D%2C%20%5Ctau_%7Bo%2C%20GCC%7D%29 "GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})")
-
-![EVI\_{t, s} \sim N (X\_{t, s}, \tau\_{o, EVI})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;EVI_%7Bt%2C%20s%7D%20%5Csim%20N%20%28X_%7Bt%2C%20s%7D%2C%20%5Ctau_%7Bo%2C%20EVI%7D%29 "EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})")
-
-Process model
-
-![X\_{t, s} \sim N(X\_{t-1, s}+ \beta\_{s} T\_{t, s} + \mu\_{s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2B%20%5Cbeta_%7Bs%7D%20T_%7Bt%2C%20s%7D%20%2B%20%5Cmu_%7Bs%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s}+ \beta_{s} T_{t, s} + \mu_{s},\tau_{a})")
-
-![X\_{t, s} \sim N(X\_{t-1, s}+ \beta T\_{t, s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2B%20%5Cbeta%20T_%7Bt%2C%20s%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s}+ \beta T_{t, s},\tau_{a})")
-
-![X\_{t, s} \sim N(X\_{t-1, s},\tau\_{a})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7Bt%2C%20s%7D%20%5Csim%20N%28X_%7Bt-1%2C%20s%7D%2C%5Ctau_%7Ba%7D%29 "X_{t, s} \sim N(X_{t-1, s},\tau_{a})")
-
-Priors
-
-![X\_{1, s} \sim N (mu\_{IC, s}, \tau\_{IC, s})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;X_%7B1%2C%20s%7D%20%5Csim%20N%20%28mu_%7BIC%2C%20s%7D%2C%20%5Ctau_%7BIC%2C%20s%7D%29 "X_{1, s} \sim N (mu_{IC, s}, \tau_{IC, s})")
-
-![\tau\_{o, GCC} \sim Gamma(a\_{o, GCC},r\_{o, GCC})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Bo%2C%20GCC%7D%20%5Csim%20Gamma%28a_%7Bo%2C%20GCC%7D%2Cr_%7Bo%2C%20GCC%7D%29 "\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})")
-
-![\tau\_{o, EVI} \sim Gamma(a\_{o, EVI},r\_{o, EVI})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Bo%2C%20EVI%7D%20%5Csim%20Gamma%28a_%7Bo%2C%20EVI%7D%2Cr_%7Bo%2C%20EVI%7D%29 "\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})")
-
-![\tau\_{a} \sim Gamma(a_a,r_a)](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau_%7Ba%7D%20%5Csim%20Gamma%28a_a%2Cr_a%29 "\tau_{a} \sim Gamma(a_a,r_a)")
-
-# Forecasts
-
-Some examples
-
--   [2020-11-24](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2020-11-24/plot.pdf)
--   [2021-07-22](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2021-07-22/plot.pdf)
--   [2022-05-18](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2022-05-18/plot.pdf)
-
-# Links
+# Resources for Challenge
 
 -   [challenge
     docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
