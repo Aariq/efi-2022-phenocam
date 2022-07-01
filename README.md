@@ -1,41 +1,85 @@
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # efi-2022-phenocam
 
 <!-- badges: start -->
 <!-- badges: end -->
 
+### Workflow:
+
+── Attaching packages ─────────────────────────────────────── tidyverse
+1.3.1 ── ✔ ggplot2 3.3.6 ✔ purrr 0.3.4 ✔ tibble 3.1.7 ✔ dplyr 1.0.9 ✔
+tidyr 1.2.0 ✔ stringr 1.4.0 ✔ readr 2.1.2 ✔ forcats 0.5.1 ── Conflicts
+────────────────────────────────────────── tidyverse_conflicts() ── ✖
+dplyr::filter() masks stats::filter() ✖ dplyr::lag() masks stats::lag()
+Loading required package: coda Linked to JAGS 4.3.1 Loaded modules:
+basemod,bugs
+
+``` mermaid
+graph LR
+  subgraph legend
+    x7420bd9270f8d27d([""Up to date""]):::uptodate --- xbf4603d6c2c2ad6b([""Stem""]):::none
+  end
+  subgraph Graph
+    x9d9338876342a883(["all_dat"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
+    x68dd683e0472743b(["mindate"]):::uptodate --> x16fdb873ff498824(["all_dat_ano"]):::uptodate
+    xb8d8de52ba56a7bb(["gcc_dat_file"]):::uptodate --> x250fae475e168023(["gcc_dat"]):::uptodate
+    x37a4b6e78faf3120(["noaa_dat_file"]):::uptodate --> xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate
+    x9d9338876342a883(["all_dat"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
+    x74653413816894b0(["batch"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
+    x8448797b328e6352(["date_list"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
+    x68dd683e0472743b(["mindate"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
+    x8fa3f0bfe3afe1bc(["RandomWalk"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
+    x18f6cc99ecb95617(["hls_df_file"]):::uptodate --> x64431175705194ee(["hls_df_proc"]):::uptodate
+    x74653413816894b0(["batch"]):::uptodate --> x8448797b328e6352(["date_list"]):::uptodate
+    x250fae475e168023(["gcc_dat"]):::uptodate --> x8448797b328e6352(["date_list"]):::uptodate
+    x68dd683e0472743b(["mindate"]):::uptodate --> x8448797b328e6352(["date_list"]):::uptodate
+    xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate --> x68dd683e0472743b(["mindate"]):::uptodate
+    x9d9338876342a883(["all_dat"]):::uptodate --> x32cef2290a81c584(["ts_plot"]):::uptodate
+    x68dd683e0472743b(["mindate"]):::uptodate --> x32cef2290a81c584(["ts_plot"]):::uptodate
+    x16fdb873ff498824(["all_dat_ano"]):::uptodate --> xdae95d0f164d35b8(["anom_plot"]):::uptodate
+    x68dd683e0472743b(["mindate"]):::uptodate --> xdae95d0f164d35b8(["anom_plot"]):::uptodate
+    x250fae475e168023(["gcc_dat"]):::uptodate --> x9d9338876342a883(["all_dat"]):::uptodate
+    x64431175705194ee(["hls_df_proc"]):::uptodate --> x9d9338876342a883(["all_dat"]):::uptodate
+    xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate --> x9d9338876342a883(["all_dat"]):::uptodate
+  end
+  classDef uptodate stroke:#000000,color:#ffffff,fill:#354823;
+  classDef none stroke:#000000,color:#000000,fill:#94a4ac;
+  linkStyle 0 stroke-width:0px;
+```
+
 # Target data
 
 gcc data is here:
 
-```r
+``` r
 gcc_dat <- 
   readr::read_csv(
     "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz",
     guess_max = 1e6
   )
-
 ```
 
 site metadata is here:
 
-```r
+``` r
 site_data <- 
   readr::read_csv(
     "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
     )
-
 ```
 
 [Data exploration](docs/EDA.md)
 
 # Links
 
-- [challenge docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
-- [phenocam](https://phenocam.sr.unh.edu/webcam/)
+-   [challenge
+    docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
+-   [phenocam](https://phenocam.sr.unh.edu/webcam/)
 
 # Repo structure
 
-- `data/` put raw data here
-- `R/` put R functions to be `source()`ed here
-- `docs/` put .Rmd files to be rendered here
+-   `data/` put raw data here
+-   `R/` put R functions to be `source()`ed here
+-   `docs/` put .Rmd files to be rendered here
