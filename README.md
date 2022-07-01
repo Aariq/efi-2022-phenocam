@@ -32,21 +32,15 @@ site_data <-
 # Model structure
 
 Data model
-$$
-GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})\\
-EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})
-$$
+$$GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})$$
+$$EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})$$
 
 Process model
 $$
 X_{t, s} \sim N(X_{t-1, s}+ \beta_{s} T_{t, s} + \mu_{s},\tau_{a})\\
-
 X_{t, s} \sim N(X_{t-1, s}+ \beta T_{t, s},\tau_{a})\\
-
 X_{t, s} \sim N(X_{t-1, s},\tau_{a})
-
 $$
-
 
 Priors
 $$
