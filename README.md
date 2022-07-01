@@ -42,17 +42,17 @@ can be used to forecast date of spring leaf-out or fall color change.
 
 ([More data exploration](docs/EDA.md))
 
+## Forecasting uncertainty
+
+-   model uncertainty
+-   climate forecast uncertainty (different forecast ensembles)
+
 ## Problems
 
 -   account for the between-sites variation in temporal patterns and in
     response to climate
 -   easy access only to most recent climate data, constrained analysis
     to 2020-\>
-
-## Forecasting uncertainty
-
--   model uncertainty
--   climate forecast uncertainty (different forecast ensembles)
 
 # Model structure
 
