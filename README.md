@@ -28,11 +28,11 @@ graph LR
     xb8d8de52ba56a7bb(["gcc_dat_file"]):::uptodate --> x250fae475e168023(["gcc_dat"]):::uptodate
     x37a4b6e78faf3120(["noaa_dat_file"]):::uptodate --> xb9d1c1bbc12ef44d(["noaa_dat"]):::uptodate
     x32cef2290a81c584(["ts_plot"]):::uptodate --> x793b57f9be3e25d5(["README"]):::started
-    x9d9338876342a883(["all_dat"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
-    x74653413816894b0(["batch"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
-    x8448797b328e6352(["date_list"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
-    x68dd683e0472743b(["mindate"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
-    x8fa3f0bfe3afe1bc(["RandomWalk"]):::uptodate --> xd7adfc39060f91a9(["out"]):::uptodate
+    x9d9338876342a883(["all_dat"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
+    x74653413816894b0(["batch"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
+    x8448797b328e6352(["date_list"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
+    x68dd683e0472743b(["mindate"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
+    x8fa3f0bfe3afe1bc(["RandomWalk"]):::uptodate --> xab6329fc3aa0e7b8(["forecasts"]):::uptodate
     x18f6cc99ecb95617(["hls_df_file"]):::uptodate --> x64431175705194ee(["hls_df_proc"]):::uptodate
     x74653413816894b0(["batch"]):::uptodate --> x8448797b328e6352(["date_list"]):::uptodate
     x250fae475e168023(["gcc_dat"]):::uptodate --> x8448797b328e6352(["date_list"]):::uptodate

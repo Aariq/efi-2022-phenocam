@@ -29,7 +29,7 @@ cat(
 #this should display correctly on GitHub, or code can be pasted into https://mermaid.live
 ```
 
-# Literature
+# Literature 
 
 - https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266
 
