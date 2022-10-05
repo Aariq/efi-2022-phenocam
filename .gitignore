@@ -4,3 +4,5 @@ drivers/
 .Rhistory
 .RData
 .Ruserdata
+/forecasts/**/*.rds
+old_stuff/*.pdf

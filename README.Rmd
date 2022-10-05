@@ -1,0 +1,155 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(targets)
+```
+
+# Phenocam Forecast for NEFI summer course 2022
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Team:
+
+- [Eric Scott](https://github.com/Aariq)
+- [Yiluan Song](https://github.com/yiluansong)
+- [Ross Alexander](https://github.com/alexanderm10)
+- [Jussi Mäkinen](https://github.com/jusmak)
+
+# Background
+
+Phenocams take automated daily photos of sites like this:
+
+<img src="https://phenocam.nau.edu/data/archive/barrocolorado/2013/03/barrocolorado_2013_03_22_120103.jpg" width="500"/>
+
+Then photos are converted to values of greenness and redness. These data can be used to forecast date of spring leaf-out or fall color change.
+
+## Challenge
+
+- Predict greenness 35 days ahead from the current day (fixed to early February 2022)
+- Observations start 2016
+
+### 18 study sites in total
+
+- 10 deciduous, 6 grassland, 2 shrubland
+
+```{r echo=FALSE}
+tar_read(ts_plot)
+```
+
+([More data exploration](docs/EDA.md))
+
+## Problems
+
+- account for the between-sites variation in temporal patterns and in response to climate
+- easy access only to most recent climate data, constrained analysis to 2020->
+
+## Forecasting uncertainty
+
+- model uncertainty
+- climate forecast uncertainty (different forecast ensembles)
+
+
+# Model structure
+
+- https://www.sciencedirect.com/science/article/abs/pii/S0034425720303266
+
+Data model
+
+$$GCC_{t, s} \sim N (X_{t, s}, \tau_{o, GCC})$$
+$$EVI_{t, s} \sim N (X_{t, s}, \tau_{o, EVI})$$
+
+Process model
+
+$$X_{t, s} \sim N(X_{t-1, s}+ \beta_{s} T_{t, s} + \mu_{s},\tau_{a})$$
+$$X_{t, s} \sim N(X_{t-1, s}+ \beta T_{t, s},\tau_{a})$$
+$$X_{t, s} \sim N(X_{t-1, s},\tau_{a})$$
+
+Priors
+
+$$X_{1, s} \sim N (mu_{IC, s}, \tau_{IC, s})$$
+$$\tau_{o, GCC} \sim Gamma(a_{o, GCC},r_{o, GCC})$$
+$$\tau_{o, EVI} \sim Gamma(a_{o, EVI},r_{o, EVI})$$
+$$\tau_{a} \sim Gamma(a_a,r_a)$$
+
+### JAGS code:
+
+```{r echo=FALSE, render='asis', comment=''}
+cat(tar_read(RandomWalk))
+```
+
+
+
+# Forecasts
+
+1) Prepare new data for assimilation
+2) Load posterior as prior/ initialize uninformative prior
+3) Set initial conditions
+4) Configure model
+5) Fit model (and forecast)
+6) Model assessment
+7) Summarize posteriors with hyperparameters (save hyperparameters)
+8) Combine previous data with forecast (save data)
+9) Visualize (save plots)
+
+Some examples
+
+- [2020-11-24](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2020-11-24/plot.pdf)
+- [2021-07-22](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2021-07-22/plot.pdf)
+- [2022-05-18](https://github.com/Aariq/efi-2022-phenocam/blob/main/forecasts/2022-05-18/plot.pdf)
+
+
+### `targets` workflow:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+cat(
+  "```mermaid",
+  targets::tar_mermaid(targets_only = TRUE, reporter = "silent"),
+  "```",
+  sep = "\n"
+)
+#this should display correctly on GitHub, or code can be pasted into https://mermaid.live
+```
+
+
+# Resources for Challenge
+
+- [challenge docs](https://projects.ecoforecast.org/neon4cast-docs/theme-phenology.html)
+- [phenocam](https://phenocam.sr.unh.edu/webcam/)
+
+
+gcc data is here:
+
+```r
+gcc_dat <- 
+  readr::read_csv(
+    "https://data.ecoforecast.org/targets/phenology/phenology-targets.csv.gz",
+    guess_max = 1e6
+  )
+
+```
+
+site metadata is here:
+
+```r
+site_data <- 
+  readr::read_csv(
+    "https://raw.githubusercontent.com/eco4cast/neon4cast-phenology/master/Phenology_NEON_Field_Site_Metadata_20210928.csv"
+    )
+
+```
+
+
+# Repo structure
+
+- `data/` put raw data here
+- `R/` put R functions to be `source()`ed here
+- `docs/` put .Rmd files to be rendered here
